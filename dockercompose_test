@@ -1,0 +1,39 @@
+version: '3'
+
+networks:
+  app-network:
+    driver: bridge
+
+
+services:
+  app:
+    build:
+      context: .
+    container_name: dockerexample
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - '8080:8080'
+    networks:
+      - app-network
+
+  db:
+    image: mysql
+    ports:
+      - '3310:3306'
+    container_name: mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
