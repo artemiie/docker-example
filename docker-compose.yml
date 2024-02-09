@@ -4,14 +4,14 @@ services:
     image: mysql:latest
     container_name: mysql_database
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: dockerexample
       MYSQL_USER: your_username
       MYSQL_PASSWORD: your_password
     volumes:
-      - ./src/main/resources/db-init
+      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
 
   spring-app:
     build: .
